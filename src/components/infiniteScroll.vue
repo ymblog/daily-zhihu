@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import Scroll from './scroll'
+import scroll from '@/assets/js/scroll';
 export default {
 	name: 'infinite-scroll',
-	mixins: [Scroll],
+	mixins: [scroll],
 	props: {
 		loading: {
 			type: Boolean,
@@ -22,16 +22,18 @@ export default {
 	},
 	methods: {
 		onScroll() {
-			if (this.loading) return
-			const scroller = this.scroller
-			const isWindow = scroller === window
-			const scrollTop = isWindow ? scroller.scrollY : scroller.scrollTop
-			const scrollHeight = isWindow ? document.documentElement.scrollHeight || document.body.scrollHeight : scroller.scrollHeight
-			let h = scrollHeight - scrollTop - 5
-			let sh = isWindow ? window.innerHeight : scroller.offsetHeight
+			if (this.loading){
+				return false;
+			}
+			const scroller = this.scroller;
+			const isWindow = scroller === window;
+			const scrollTop = isWindow ? scroller.scrollY : scroller.scrollTop;
+			const scrollHeight = isWindow ? document.documentElement.scrollHeight || document.body.scrollHeight : scroller.scrollHeight;
+			let h = scrollHeight - scrollTop - 5;
+			let sh = isWindow ? window.innerHeight : scroller.offsetHeight;
 			//滑动距离大于内容高度触发加载事件
 			if (h <= sh) {
-				this.$emit('load')
+				this.$emit('load');
 			}
 		}
 	}

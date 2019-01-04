@@ -1,5 +1,22 @@
 <template>
 <div>
+    <lt-header @show="toggle">
+    </lt-header>
+    <aside class="aside" :class="{open:open,docked:docked}" @click="toggle">
+        <ul>
+            <li class="chose">
+                <router-link :to="{path:'/'}">
+                    <span>首页</span>
+                    <i class="iconfont icon-ic_star_black"/>
+                </router-link>
+            </li>
+            <li @click="jump()">
+                <span>项目地址</span>
+                <i class="iconfont icon-github" />
+            </li>
+        </ul>
+        <div class="cover" @touchmove="prevent"></div>
+    </aside>
 	<swipe swipeid="swipe" ref="swiper" :autoplay="3000" effect="slide">
 		<div @click="go(top.id)" v-for="top in tops" class="swiper-slide" slot="swiper-con">
 			<img :src="top.image">
@@ -18,6 +35,7 @@
 </template>
 <script>
 import swipe from '@/components/swipe/swipe.vue';
+import ltHeader from '@/components/header.vue';
 import infiniteScroll from '@/components/infiniteScroll';
 import goTop from '@/components/goTop';
 export default {
@@ -29,33 +47,62 @@ export default {
 			this.swiper = swiper.dom;
 		}
 	},
-	components:{
-		infiniteScroll,
-		swipe,
-		goTop
-	},
 	activated() {
 		if (this.swiper) {
 			this.swiper.startAutoplay();
 		}
 	},
 	deactivated() {
-		this.loop = false;
 		if (this.swiper) {
 			this.swiper.stopAutoplay();
 		}
 	},
-	data() {
-		return {
-			loading: false,
-			count: 1,
-			scroller: null,
-			list: [],
-			swiper: "",
-			tops: []
-		}
-	},
+    watch: {
+        '$route' (to, from) {
+            this.timer = setTimeout(() => {
+                if(this.open){
+                    this.open = false;
+                    this.docked = false;
+                }
+                clearTimeout(this.timer);
+            }, 300);
+        }
+    },
+    data() {
+        return {
+            loading: false,
+            count: 1,
+            scroller: null,
+            list: [],
+            swiper: "",
+            timer:'',
+            open: false,
+            docked: false,
+            tops: []
+        }
+    },
+    components:{
+        infiniteScroll,
+        swipe,
+        goTop,
+        ltHeader
+    },
 	methods: {
+        toggle() {
+            if (!this.open) {
+                this.docked = true;
+                this.open = true;
+            } else {
+                this.open = false;
+                setTimeout(() => {
+                    this.docked = false;
+                }, 300);
+            }
+        },
+        prevent(event) {
+            event.preventDefault()
+            event.stopPropagation()
+        },
 		getList(value) {
 			if(value){
 				this.$ajax({
@@ -97,7 +144,20 @@ export default {
 @yellow: #FFD300;
 @blue: #5B7492;
 @gray: #acb9c8;
-
+.header {
+    width: 100%;
+    height: 1.5rem;
+    z-index: 9;
+    padding-left: 5%;
+    position: fixed;
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.51) 95%);
+    .iconfont {
+        color: #fff;
+        font-size: 0.8rem;
+        top: 20%;
+        position: relative;
+    }
+}
 .app-view {
     .swiper-container {
         width: 100%;
@@ -196,6 +256,77 @@ export default {
             font-size: 0.4rem;
             text-align: justify;
             margin: 0;
+        }
+    }
+}
+.aside {
+    z-index: 11;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    visibility: hidden;
+    &::-webkit-scrollbar {
+        display: none!important;
+        width: 0!important;
+        height: 0!important;
+        -webkit-appearance: none;
+        opacity: 0!important;
+    }
+    ul {
+        margin: 0;
+        float: left;
+        width: 60%;
+        height: 100%;
+        padding: 1.3rem 0.5rem 0.5rem;
+        overflow: auto;
+        background: rgba(91, 116, 146, 0.75);
+        transform: translate(-100%, 0);
+        transition: transform 0.3s ease;
+        -webkit-overflow-scrolling: touch;
+        &::-webkit-scrollbar {
+            display: none!important;
+            width: 0!important;
+            height: 0!important;
+            -webkit-appearance: none;
+            opacity: 0!important;
+        }
+    }
+    li {
+        cursor: pointer;
+        font-size: 0.43rem;
+        list-style: none;
+        color: #fff;
+        margin-top: 20px;
+        .iconfont {
+            float: right;
+            font-size: 0.6rem;
+        }
+        &.chose {
+            color: #FFD300;
+        }
+    }
+    .cover {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        display: none;
+        background: rgba(172, 185, 201, 0.40);
+        transition: opacity 0.3s ease;
+    }
+    &.open {
+        ul {
+            transform: translate(0);
+        }
+        .cover {
+            opacity: 1;
+        }
+    }
+    &.docked {
+        visibility: visible;
+        .cover {
+            display: block;
         }
     }
 }

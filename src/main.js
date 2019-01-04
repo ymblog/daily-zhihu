@@ -1,9 +1,8 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
-import infiniteScroll from 'vue-infinite-scroll';
 import vueLazyload from 'vue-lazyload';
-import FastClick from 'fastclick';
+import fastClick from 'fastclick';
 import '@/assets/js/lib-flexible';//移动端使用
 import '@/assets/js/filter';//引入过滤器
 import '@/assets/js/directive';//引入自定义指令
@@ -13,7 +12,7 @@ Vue.config.productionTip = false;
 //解决300毫秒点击问题
 if ('addEventListener' in document) {
     document.addEventListener('DOMContentLoaded', function() {
-        FastClick.attach(document.body);
+        fastClick.attach(document.body);
     }, false);
 }
 //懒加载
@@ -24,12 +23,10 @@ Vue.use(vueLazyload, {
 	attempt: 3,
 	listenEvents: [ 'scroll' ]
 });
-//加载更多
-Vue.use(infiniteScroll);
 Vue.use(util);
 new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    router,
+    components: { App },
+    template: '<App/>'
 })

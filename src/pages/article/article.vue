@@ -1,5 +1,6 @@
 <template>
 <div class="con">
+    <lt-header></lt-header>
 	<div v-if="data.image" class="con-img">
 		<img :src="data.image" />
 		<div class="con-img-mask"></div>
@@ -9,11 +10,24 @@
 </div>
 </template>
 <script>
+import ltHeader from '@/components/header.vue';
 export default {
 	mounted: function() {
 		this.scroller = this.$el;
 	},
+    data() {
+        return {
+            data: "",
+            flag:'',
+            scroller: window,
+            article:{}
+        }
+    },
+    components:{
+        ltHeader
+    },
 	activated: function() {
+        console.log(this.article);
 		const id = this.$route.params.id;
 		if (this.article.hasOwnProperty(id)) {
 			this.data = this.article[id];
@@ -29,13 +43,6 @@ export default {
 	},
 	deactivated: function() {
 		this.data = "";
-	},
-	data() {
-		return {
-			data: "",
-			scroller: window,
-            article:[]
-		}
 	}
 }
 </script>
@@ -125,7 +132,8 @@ img {
             }
         }
         .content {
-            font-size: 0.4rem;
+            font-size: 28px;
+            line-height:1.7;
         }
         .question {
             blockquote {

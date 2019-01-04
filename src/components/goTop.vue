@@ -5,10 +5,10 @@
 	</div>
 </template>
 <script>
-	import Scroll from './scroll'
+	import scroll from '@/assets/js/scroll';
 	export default{
 		name:'go-top',
-		mixins: [Scroll],
+		mixins: [scroll],
 		data(){
 			return{
 				isShowTop:false
@@ -16,6 +16,7 @@
 		},
 		methods:{
 			onScroll(){
+				console.log(1);
 				const isWindow = this.scroller === window;
 				const scrollTop = isWindow ? this.scroller.scrollY : this.scroller.scrollTop;
             	this.isShowTop = scrollTop > 100 ? true : false;
