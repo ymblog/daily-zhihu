@@ -151,7 +151,7 @@ export default {
 			return y + "" + m + "" + d;
 		},
         jump(){
-            window.open('https://ymblog.github.io/daily-zhihu/dist');
+            window.open('https://github.com/ymblog/daily-zhihu');
         }
 	}
 }
