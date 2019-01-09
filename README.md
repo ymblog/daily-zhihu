@@ -16,12 +16,20 @@ api来自知乎( [知乎Zhihu](http://www.zhihu.com/) ), 项目中所有内容�
 + vuex
 + axios
 
+## 优化
+
++ 滚动节流
+
 ## 完成功能
 
 + 知乎日报列表
 + 知乎日报详情
++ 弹窗
++ 滚动加载
 
 ## 预览
+
+[传送门](https://ymblog.github.io/daily-zhihu/dist)
 
 ## 感谢
 喜欢的同学可以顺手给个star支持一下，谢谢！！

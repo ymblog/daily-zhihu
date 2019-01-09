@@ -17,20 +17,33 @@
         </ul>
         <div class="cover" @touchmove="prevent"></div>
     </aside>
-	<swipe swipeid="swipe" ref="swiper" :autoplay="3000" effect="slide">
-		<div @click="go(top.id)" v-for="top in tops" class="swiper-slide" slot="swiper-con">
-			<img :src="top.image">
-			<div></div>
-			<h3>{{top.title}}</h3>
-		</div>
-	</swipe>
-	<router-link class="list-con" :to="{name:'article', params:{id:item.id}}"  v-for="item in list">
-		<img :src="item.images[0]" />
-		<p>{{item.title}}</p>
-	</router-link>
-	<!-- 滑动加载更多组件 -->
-	<go-top :scroller="scroller"></go-top>
-	<infinite-scroll :scroller="scroller" :loading="loading" @load="loadMore" />
+    <template>
+        <swipe v-if="tops.length > 0" swipeid="swipe" ref="swiper" :autoplay="3000" effect="slide">
+            <div @click="go(top.id)" v-for="top in tops" class="swiper-slide" slot="swiper-con">
+                <img :src="top.image">
+                <div></div>
+                <h3>{{top.title}}</h3>
+            </div>
+        </swipe>
+        <div v-else class="skeleton-swiper"></div>
+        <template v-if="list.length > 0">
+            <router-link class="list-con" :to="{name:'article', params:{id:item.id}}"  v-for="item in list">
+                <img :src="item.images[0]" />
+                <p>{{item.title}}</p>
+            </router-link>
+        </template>
+        <template v-else>
+            <div v-for="i in 6" class="skeleton-list">
+                <div class="skeleton-item">
+                    <div class="skeleton-box"></div>
+                    <div class="skeleton-line"></div>
+                </div>
+            </div>
+        </template>
+    </template>
+	<infinite-scroll :loading="loading" @load="loadMore" :busy="busy" :isNoMore="isNoMore"/>
+    <!-- 滑动加载更多组件 -->
+    <go-top></go-top>
 </div>
 </template>
 <script>
@@ -41,11 +54,7 @@ import goTop from '@/components/goTop';
 export default {
 	mounted() {
 		this.getList(1);
-		this.scroller = this.$el;
-		let swiper = this.$refs.swiper;
-		if (swiper.dom) {
-			this.swiper = swiper.dom;
-		}
+		this.scroller = window;
 	},
 	activated() {
 		if (this.swiper) {
@@ -72,13 +81,14 @@ export default {
         return {
             loading: false,
             count: 1,
-            scroller: null,
             list: [],
             swiper: "",
             timer:'',
             open: false,
             docked: false,
-            tops: []
+            tops: [],
+            isNoMore:false,
+            busy:false
         }
     },
     components:{
@@ -111,6 +121,8 @@ export default {
 				}).then(data => {
 					this.list = data.stories;
 					this.tops = data.top_stories;
+                    this.loading = true;
+                    this.busy = false;
 				});
 			}else{
 				this.$ajax({
@@ -118,18 +130,19 @@ export default {
 		            method: 'GET'
 				}).then(data => {
 					this.list = data.stories;
+                    this.busy = false;
 				});
 			}
 		},
 		loadMore() {
 			let vue = this;
-			this.loading = true;
 			vue.count--;
+            this.busy = true;
 			vue.getList();
 		},
 		getDate(Count) {
 			var dd = new Date();
-			dd.setDate(dd.getDate() + Count); //获取AddDayCount天后的日期
+			dd.setDate(dd.getDate() + Count);
 			var y = dd.getFullYear();
 			var m = dd.getMonth() + 1; //获取当前月份的日期
 			m = m >= 10 ? m : "0" + m
@@ -144,6 +157,32 @@ export default {
 @yellow: #FFD300;
 @blue: #5B7492;
 @gray: #acb9c8;
+@bg : #eee;
+.swiper-container{
+    height:8rem;
+}
+.skeleton-swiper{
+    height: 8rem;
+    margin-bottom: 15px;
+    background: @bg;
+}
+.skeleton-item{
+    display:flex;
+    padding: .3rem;
+    margin-bottom: .4rem;
+}
+.skeleton-box{
+    width: 2rem;
+    margin-right: .4rem;
+    height: 2rem;
+    background: @bg;
+}
+.skeleton-line{
+    height:.4rem;
+    align-self:center;
+    flex:1;
+    background: @bg;
+}
 .header {
     width: 100%;
     height: 1.5rem;
@@ -164,7 +203,6 @@ export default {
     }
     .swiper-slide {
         height: 8rem;
-        overflow: hidden;
         position: relative;
     }
     .swiper-container-horizontal > .swiper-pagination-bullets {
@@ -280,7 +318,6 @@ export default {
         width: 60%;
         height: 100%;
         padding: 1.3rem 0.5rem 0.5rem;
-        overflow: auto;
         background: rgba(91, 116, 146, 0.75);
         transform: translate(-100%, 0);
         transition: transform 0.3s ease;

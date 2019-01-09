@@ -12,14 +12,10 @@
 <script>
 import ltHeader from '@/components/header.vue';
 export default {
-	mounted: function() {
-		this.scroller = this.$el;
-	},
     data() {
         return {
             data: "",
             flag:'',
-            scroller: window,
             article:{}
         }
     },
@@ -27,7 +23,6 @@ export default {
         ltHeader
     },
 	activated: function() {
-        console.log(this.article);
 		const id = this.$route.params.id;
 		if (this.article.hasOwnProperty(id)) {
 			this.data = this.article[id];

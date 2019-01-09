@@ -1,6 +1,19 @@
 /**
  * 通用布局css
  */
+@media screen and (min-width: 640px) {
+    html{
+        font-size:37.5px !important;
+    }
+    .app-view {
+        width: 640px;/* no*/
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .aside ul {
+        width: 350px;
+    }
+}
 /* loading */
 @-webkit-keyframes rotate {0% {-webkit-transform: rotate(0deg) ; transform: rotate(0deg) ; } 50% {-webkit-transform: rotate(180deg); transform: rotate(180deg) ; } 100% {-webkit-transform: rotate(360deg) ; transform: rotate(360deg) ; } } @keyframes rotate {0% {-webkit-transform: rotate(0deg) ; transform: rotate(0deg) ; } 50% {-webkit-transform: rotate(180deg); transform: rotate(180deg); } 100% {-webkit-transform: rotate(360deg) ; transform: rotate(360deg) } }
 .lt-loading{
@@ -11,7 +24,7 @@
         height: 50px;
         width: 50px;
         border-radius: 100%;
-        border: 2px solid #f95c68;
+        border: 2px solid #FFD300;
         border-bottom-color: transparent;
         background: transparent;
         -webkit-animation: rotate 0.75s linear infinite;
@@ -41,4 +54,16 @@
 .gotop-enter, .gotop-leave-to{
     transform: translateY(110px);
     -webkit-transform: translateY(110px);
+}
+/* banner */
+.slide-left-enter,
+.slide-right-leave-active {
+    opacity: 0;
+    -webkit-transform: translate(50vw, 0);
+}
+
+.slide-left-leave-active,
+.slide-right-enter {
+    opacity: 0.1;
+    -webkit-transform: translate(-50vw, 0);
 }

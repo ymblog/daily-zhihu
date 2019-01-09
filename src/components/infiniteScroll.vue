@@ -15,6 +15,14 @@ export default {
 			type: Boolean,
 			default: false
 		},
+		busy:{
+			type: Boolean,
+			default: false
+		},
+		isNoMore:{
+			type: Boolean,
+			default: false
+		},
 		loadingText: {
 			type: String,
 			default: '正在加载...'
@@ -22,7 +30,7 @@ export default {
 	},
 	methods: {
 		onScroll() {
-			if (this.loading){
+			if (this.busy || this.isNoMore){
 				return false;
 			}
 			const scroller = this.scroller;
@@ -40,7 +48,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 .infinite-scroll {
 	display: flex;
 	justify-content: center;
@@ -53,70 +61,6 @@ export default {
 .infinite-scroll-text {
 	margin-left: 16px;
 	font-size: 16px;
-}
-.loader {
-	width: 30px;
-	height: 30px;
-	position: relative;
-}
-.loader-path {
-	stroke-dasharray: 1, 200;
-	stroke-dashoffset: 0;
-	animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
-	stroke-linecap: round;
-}
-.loader-circular {
-	animation: rotate 2s linear infinite;
-	height: 100%;
-	transform-origin: center center;
-	width: 100%;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	margin: auto;
-}
-@keyframes rotate {
-	from {
-		transform: rotate(0deg);
-	}
-	50% {
-		transform: rotate(180deg);
-	}
-	to {
-		transform: rotate(360deg);
-	}
-}
-
-@keyframes dash {
-	0% {
-		stroke-dasharray: 1, 200;
-		stroke-dashoffset: 0;
-	}
-	50% {
-		stroke-dasharray: 89, 200;
-		stroke-dashoffset: -35;
-	}
-	100% {
-		stroke-dasharray: 89, 200;
-		stroke-dashoffset: -124;
-	}
-}
-@keyframes color {
-	0%,
-	100% {
-		stroke: #FFD300;
-	}
-	40% {
-		stroke: #5B7492;
-	}
-	66% {
-		stroke: #FFD300;
-	}
-	80%,
-	90% {
-		stroke: #acb9c8;
-	}
+	color:#5B7492;
 }
 </style>

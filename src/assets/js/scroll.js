@@ -2,7 +2,8 @@ export default {
 	props: {
 		scroller: {
 			type: [ HTMLDocument, Element, Window ],
-			default: window
+			default: () => {return window},
+			required:false
 		}
 	},
 	mounted() {

@@ -16,30 +16,28 @@
 		},
 		methods:{
 			onScroll(){
-				console.log(1);
-				const isWindow = this.scroller === window;
-				const scrollTop = isWindow ? this.scroller.scrollY : this.scroller.scrollTop;
-            	this.isShowTop = scrollTop > 100 ? true : false;
+				const doc = document.body.scrollTop ? document.body : document.documentElement;
+            	this.isShowTop = doc.scrollTop > 100 ? true : false;
 			},
 			goTop(){
-			   	const isWindow = this.scroller === window;
-				let scrollTop = isWindow ? this.scroller.scrollY : this.scroller.scrollTop;
-				const doc = document.body.scrollTop? document.body : document.documentElement;
-			    let top = () => {
+				const doc = document.body.scrollTop ? document.body : document.documentElement;
+				let scrollTop = this.doc.scrollTop;
+			    const top = () => {
+			    	//设置平滑滚动
 			        scrollTop = scrollTop + (0 - scrollTop) / 2;
 			        if (scrollTop < 1) {
-			            this.scroller.scrollTop = 0;
+			            this.doc.scrollTop = 0;
 			            return false;
 			        }
-			        this.scroller.scrollTop = scrollTop;
-			        stop = requestAnimationFrame(top);    
+			        this.doc.scrollTop = scrollTop;
+			        requestAnimationFrame(top);    
 			    };
 			    top();
 			}
 		}
 	}
 </script>
-<style lang="less">
+<style lang="less" scoped>
 	.circle {
 		width: 60px;
 		height: 60px;
