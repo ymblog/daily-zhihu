@@ -35,12 +35,12 @@ export default {
 			}
 			const scroller = this.scroller;
 			const isWindow = scroller === window;
-			const scrollTop = isWindow ? scroller.scrollY : scroller.scrollTop;
+			const doc = isWindow ? (document.body.scrollTop ? document.body : document.documentElement) : scroller;
 			const scrollHeight = isWindow ? document.documentElement.scrollHeight || document.body.scrollHeight : scroller.scrollHeight;
-			let h = scrollHeight - scrollTop - 5;
-			let sh = isWindow ? window.innerHeight : scroller.offsetHeight;
+			let height = scrollHeight - doc.scrollTop - 5;
+			let contHeight = isWindow ? window.innerHeight : scroller.offsetHeight;
 			//滑动距离大于内容高度触发加载事件
-			if (h <= sh) {
+			if (height <= contHeight) {
 				this.$emit('load');
 			}
 		}

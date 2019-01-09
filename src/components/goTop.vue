@@ -21,15 +21,15 @@
 			},
 			goTop(){
 				const doc = document.body.scrollTop ? document.body : document.documentElement;
-				let scrollTop = this.doc.scrollTop;
+				let scrollTop = doc.scrollTop;
 			    const top = () => {
 			    	//设置平滑滚动
 			        scrollTop = scrollTop + (0 - scrollTop) / 2;
 			        if (scrollTop < 1) {
-			            this.doc.scrollTop = 0;
+			            doc.scrollTop = 0;
 			            return false;
 			        }
-			        this.doc.scrollTop = scrollTop;
+			        doc.scrollTop = scrollTop;
 			        requestAnimationFrame(top);    
 			    };
 			    top();

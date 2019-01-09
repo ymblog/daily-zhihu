@@ -48,6 +48,8 @@ export default {
 	},
 	watch: {
 		scroller( scroller, oldScroller ) {
+			console.log(scroller);
+			console.log(oldScroller);
 			if ( scroller === oldScroller ){
 				return false;
 			}

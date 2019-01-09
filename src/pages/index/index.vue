@@ -149,7 +149,10 @@ export default {
 			var d = dd.getDate();
 			d = d >= 10 ? d : "0" + d;
 			return y + "" + m + "" + d;
-		}
+		},
+        jump(){
+            window.open('https://ymblog.github.io/daily-zhihu/dist');
+        }
 	}
 }
 </script>
