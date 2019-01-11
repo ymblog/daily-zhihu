@@ -2,7 +2,7 @@
 <div>
     <lt-header @show="toggle">
     </lt-header>
-    <aside class="aside" :class="{open:open,docked:docked}" @click="toggle">
+    <aside class="aside" :class="{open:open}" @click="toggle">
         <ul>
             <li class="chose">
                 <router-link :to="{path:'/'}">
@@ -56,39 +56,15 @@ export default {
 		this.getList(1);
 		this.scroller = window;
 	},
-	activated() {
-		if (this.swiper) {
-			this.swiper.startAutoplay();
-		}
-	},
-	deactivated() {
-		if (this.swiper) {
-			this.swiper.stopAutoplay();
-		}
-	},
-    watch: {
-        '$route' (to, from) {
-            this.timer = setTimeout(() => {
-                if(this.open){
-                    this.open = false;
-                    this.docked = false;
-                }
-                clearTimeout(this.timer);
-            }, 300);
-        }
-    },
     data() {
         return {
-            loading: false,
-            count: 1,
-            list: [],
-            swiper: "",
-            timer:'',
-            open: false,
-            docked: false,
-            tops: [],
-            isNoMore:false,
-            busy:false
+            loading: false,//加载
+            count: 1,//数据数量
+            list: [],//列表数据
+            open: false,//左侧开关
+            tops: [],//banner数据
+            isNoMore:false,//是否已经没有数据
+            busy:false//加载更多开关
         }
     },
     components:{
@@ -98,21 +74,15 @@ export default {
         ltHeader
     },
 	methods: {
+        //左侧开关
         toggle() {
-            if (!this.open) {
-                this.docked = true;
-                this.open = true;
-            } else {
-                this.open = false;
-                setTimeout(() => {
-                    this.docked = false;
-                }, 300);
-            }
+            this.open = !this.open;
         },
         prevent(event) {
             event.preventDefault()
             event.stopPropagation()
         },
+        //获取列表
 		getList(value) {
 			if(value){
 				this.$ajax({
@@ -134,15 +104,16 @@ export default {
 				});
 			}
 		},
+        //加载更多
 		loadMore() {
-			let vue = this;
-			vue.count--;
+			this.count--;
             this.busy = true;
-			vue.getList();
+			this.getList();
 		},
-		getDate(Count) {
+        //获取日期
+		getDate(count) {
 			var dd = new Date();
-			dd.setDate(dd.getDate() + Count);
+			dd.setDate(dd.getDate() + count);
 			var y = dd.getFullYear();
 			var m = dd.getMonth() + 1; //获取当前月份的日期
 			m = m >= 10 ? m : "0" + m
@@ -156,7 +127,7 @@ export default {
 	}
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 @yellow: #FFD300;
 @blue: #5B7492;
 @gray: #acb9c8;
@@ -356,10 +327,12 @@ export default {
         transition: opacity 0.3s ease;
     }
     &.open {
+        visibility: visible;
         ul {
             transform: translate(0);
         }
         .cover {
+            display: block;
             opacity: 1;
         }
     }

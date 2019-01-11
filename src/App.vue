@@ -1,9 +1,10 @@
 <template>
 	<div id="app">
 		<transition name="fade" mode="out-in">
-			<keep-alive>
+			<keep-alive v-if="$route.meta.keepAlive">
 				<router-view class="app-view"></router-view>
 			</keep-alive>
+			<router-view v-else class="app-view"></router-view>
 		</transition>
 	</div>
 </template>

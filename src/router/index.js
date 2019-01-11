@@ -14,6 +14,16 @@ meta:{
 }
 */
 const router = new Router({
+    //设置列表位置
+    scrollBehavior (to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition;
+        } else {
+            if (to.meta.keepAlive) {
+                to.meta.savedPosition = document.body.scrollTop;
+            }
+        }
+    },
     routes: [
         {
             path: '/',
@@ -22,7 +32,10 @@ const router = new Router({
          {
             name:'article',
             path: '/article/:id',
-            component: article
+            component: article,
+            meta:{
+                keepAlive:true
+            }
         }
     ]
 });

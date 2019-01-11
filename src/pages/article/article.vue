@@ -6,6 +6,12 @@
 		<div class="con-img-mask"></div>
 		<h2>{{data.title}}</h2>
 	</div>
+    <div v-else class="skeleton-box">
+        <div class="skeleton-banner"></div>
+        <ul v-for="i in 3">
+            <li v-for="i in 6"></li>
+        </ul>
+    </div>
     <div class="con-answer" v-html="data.body"></div>
 </div>
 </template>
@@ -14,9 +20,8 @@ import ltHeader from '@/components/header.vue';
 export default {
     data() {
         return {
-            data: "",
-            flag:'',
-            article:{}
+            data: "",//数据
+            article:{}//数据存储,下次使用本地存储
         }
     },
     components:{
@@ -24,6 +29,9 @@ export default {
     },
 	activated: function() {
 		const id = this.$route.params.id;
+        const doc = document.body.scrollTop ? document.body : document.documentElement
+        doc.scrollTop = 0;
+        //避免多次读取一样的id的详情数据
 		if (this.article.hasOwnProperty(id)) {
 			this.data = this.article[id];
 		} else {
@@ -41,11 +49,31 @@ export default {
 	}
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 @red: #FC4482;
 @yellow: #FFD300;
 @blue: #5B7492;
 @gray: #acb9c8;
+@bg : #eee;
+.skeleton-banner{
+    height:450px;
+    background:@bg;
+}
+.skeleton-box{
+    width:100%;
+    box-sizing:border-box;
+    ul{
+        margin: 30px;
+    }
+    li{
+        margin-bottom:25px;
+        height:35px;
+        background:@bg;
+        &:first-child{
+            margin-left: 2em;
+        }
+    }
+}
 img {
     width: 100%;
 }
@@ -162,7 +190,7 @@ img {
         .content-image {
             width: inherit;
             max-width: 100%;
-            margin: 0 auto;
+            margin: 15px auto;
             display: block;
         }
         .view-more {
